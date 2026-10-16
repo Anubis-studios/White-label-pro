@@ -10,7 +10,7 @@ export const freeProviders = [
       baseCostPerUnit: 0,
       rateLimit: "150/month",
       tier: "standard",
-      category: "game_art",
+      category: "gameart2d",
     },
   },
   {

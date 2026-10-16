@@ -1,21 +1,15 @@
 import prisma from '../db/prisma';
 import { ProviderType, MarkupType } from '@prisma/client';
 import { computeProviderCost, computePlatformProfit } from './pricingAndRoutingService';
-import { freeProviders } from '../registry/freeProviders';
+import { seedFreeProviders } from './seedProvidersService';
 
 export async function syncSuppliersAndProducts() {
-  let providers = await prisma.modelProvider.findMany();
-
-  if (providers.length === 0) {
-    for (const p of freeProviders) {
-      await prisma.modelProvider.create({
-        data: p
-      });
-    }
-    providers = await prisma.modelProvider.findMany();
-  }
+  await seedFreeProviders();
+  const providers = await prisma.modelProvider.findMany();
 
   for (const provider of providers) {
+    const meta = (provider.metadata as Record<string, any>) || {};
+    const category = meta.category || '';
     const cheapestCost = computeProviderCost(provider.metadata);
     const platformProfit = computePlatformProfit(cheapestCost);
 
@@ -27,7 +21,7 @@ export async function syncSuppliersAndProducts() {
       supplier = await prisma.supplier.create({
         data: {
           name: provider.name,
-baseCostPerUnit: cheapestCost,
+          baseCostPerUnit: cheapestCost,
           currency: 'GBP',
           apiBaseUrl: provider.apiBaseUrl,
           apiKey: provider.apiKey,
@@ -46,13 +40,18 @@ baseCostPerUnit: cheapestCost,
       });
     }
 
-    if (provider.type === ProviderType.IMAGE) {
-      await ensureProduct(supplier.id, `${provider.name} - Single Asset`, `Generate 1 asset using AI engine`, 'image', 1, platformProfit);
-      await ensureProduct(supplier.id, `${provider.name} - Asset Pack (5)`, `Generate 5 asset pack using AI engine`, 'image', 5, platformProfit);
-    } else if (provider.type === ProviderType.LLM) {
-      await ensureProduct(supplier.id, `${provider.name} - Prompt Response`, `Generate high speed response using AI engine`, 'request', 1, platformProfit);
-    } else if (provider.type === ProviderType.TTS) {
-      await ensureProduct(supplier.id, `${provider.name} - Audio Generation`, `Synthesize audio track using AI engine`, 'audio', 1, platformProfit);
+    if (category === 'video_generation' || provider.name === 'RunwayML' || provider.name === 'Luma AI') {
+      await ensureProduct(supplier.id, `${provider.name} - Short Trailer`, `Generate cinematic short AI trailer`, 'video', 1, platformProfit);
+      await ensureProduct(supplier.id, `${provider.name} - Promo Clip`, `Generate promotional short AI video clip`, 'video', 1, platformProfit);
+      await ensureProduct(supplier.id, `${provider.name} - Cutscene`, `Generate high quality game cutscene`, 'video', 1, platformProfit);
+    } else if (category === 'music' || category === 'voice' || provider.name === 'AIVA' || provider.name === 'ElevenLabs') {
+      await ensureProduct(supplier.id, `${provider.name} - Voice Line`, `Synthesize custom NPC dialogue voice line`, 'audio', 1, platformProfit);
+      await ensureProduct(supplier.id, `${provider.name} - Audio Pack (5)`, `Generate 5 audio dialogue or SFX tracks`, 'audio', 5, platformProfit);
+      await ensureProduct(supplier.id, `${provider.name} - Theme Track`, `Compose soundtrack or ambient theme music`, 'audio', 1, platformProfit);
+    } else {
+      await ensureProduct(supplier.id, `${provider.name} - Single Asset`, `Generate 1 2D/3D asset using AI engine`, 'image', 1, platformProfit);
+      await ensureProduct(supplier.id, `${provider.name} - Asset Pack (5)`, `Generate 5 2D/3D asset pack using AI engine`, 'image', 5, platformProfit);
+      await ensureProduct(supplier.id, `${provider.name} - HD / Cinematic`, `Generate HD render asset using AI engine`, 'image', 1, platformProfit);
     }
   }
 }

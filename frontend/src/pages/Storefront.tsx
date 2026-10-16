@@ -4,7 +4,7 @@ import { GlowCard } from '../components/GlowCard';
 import { NeonButton } from '../components/NeonButton';
 import { HologramAvatar } from '../components/HologramAvatar';
 import { LightningHover } from '../components/LightningHover';
-import { Sparkles, ShoppingCart, Zap, ArrowRight, Eye } from 'lucide-react';
+import { Sparkles, ShoppingCart, Eye, Gamepad2, Video, Music, Image as ImageIcon } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -28,7 +28,7 @@ export const Storefront: React.FC<StorefrontProps> = ({
 }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'ALL' | 'IMAGE' | 'REQUEST' | 'AUDIO'>('ALL');
+  const [filter, setFilter] = useState<'ALL' | 'IMAGE' | 'VIDEO' | 'AUDIO' | 'REQUEST'>('ALL');
 
   useEffect(() => {
     fetchProducts();
@@ -41,11 +41,11 @@ export const Storefront: React.FC<StorefrontProps> = ({
     } catch (err) {
       console.error('Failed to fetch storefront products:', err);
       setProducts([
-        { id: 'p1', name: 'Single Image', description: 'Generate 1 ultra-HD artificial intelligence image.', unitLabel: 'image', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
-        { id: 'p2', name: 'Image Pack (5)', description: 'Generate 5 high quality AI images bundle.', unitLabel: 'image', unitsPerPurchase: 5, pricePenceTotal: 150, formattedPrice: '£1.50', currency: 'GBP' },
-        { id: 'p3', name: 'Short Response', description: 'Generate high speed quick text response.', unitLabel: 'request', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
-        { id: 'p4', name: 'Batch Requests (10)', description: 'Run 10 batch AI prompt requests.', unitLabel: 'request', unitsPerPurchase: 10, pricePenceTotal: 300, formattedPrice: '£3.00', currency: 'GBP' },
-        { id: 'p5', name: 'Neural Audio Synthesis', description: 'Convert text into natural neural voice audio.', unitLabel: 'audio', unitsPerPurchase: 1, pricePenceTotal: 35, formattedPrice: '£0.35', currency: 'GBP' }
+        { id: 'p1', name: 'Makko AI - Single Asset', description: 'Generate 1 2D/3D game asset using AI engine.', unitLabel: 'image', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
+        { id: 'p2', name: 'RunwayML - Short Trailer', description: 'Generate cinematic short AI trailer video.', unitLabel: 'video', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
+        { id: 'p3', name: 'ElevenLabs - Voice Line', description: 'Synthesize custom NPC dialogue voice line.', unitLabel: 'audio', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
+        { id: 'p4', name: 'PixelLab.ai - Asset Pack (5)', description: 'Generate 5 pixel art sprite assets bundle.', unitLabel: 'image', unitsPerPurchase: 5, pricePenceTotal: 150, formattedPrice: '£1.50', currency: 'GBP' },
+        { id: 'p5', name: 'AIVA - Theme Track', description: 'Compose soundtrack or ambient game music.', unitLabel: 'audio', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' }
       ]);
     } finally {
       setLoading(false);
@@ -55,8 +55,9 @@ export const Storefront: React.FC<StorefrontProps> = ({
   const filteredProducts = products.filter(p => {
     if (filter === 'ALL') return true;
     if (filter === 'IMAGE') return p.unitLabel === 'image';
-    if (filter === 'REQUEST') return p.unitLabel === 'request';
+    if (filter === 'VIDEO') return p.unitLabel === 'video';
     if (filter === 'AUDIO') return p.unitLabel === 'audio';
+    if (filter === 'REQUEST') return p.unitLabel === 'request';
     return true;
   });
 
@@ -68,27 +69,31 @@ export const Storefront: React.FC<StorefrontProps> = ({
             <Sparkles className="w-3.5 h-3.5 text-[#FFD700]" /> CYBER-AI PLATFORM ONLINE
           </div>
           <h1 className="text-3xl sm:text-5xl font-orbitron font-extrabold uppercase text-white tracking-wider leading-tight">
-            Autonomous <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9B00FF] via-[#00CFFF] to-[#FFD700]">Next-Gen</span> AI Intelligence
+            Autonomous <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9B00FF] via-[#00CFFF] to-[#FFD700]">Game & Media</span> AI Intelligence
           </h1>
           <p className="font-rajdhani text-lg text-[#8E8EA8]">
-            Instant access to high-yield synthetic intelligence, neural art generation, and automated workflows. High performance, zero latency limits.
+            Instant access to 2D/3D game art, pixel sprites, HD trailers, NPC voice lines, ambient music, and synthetic AI video.
           </p>
         </div>
       </div>
 
-      <HologramAvatar message="All white-label neural nodes active and operating at peak capacity." />
+      <HologramAvatar message="All white-label game art, video, and audio AI nodes active and operational." />
 
       <div className="flex flex-wrap items-center gap-3 border-b border-white/10 pb-4">
-        {(['ALL', 'IMAGE', 'REQUEST', 'AUDIO'] as const).map((tab) => (
+        {(['ALL', 'IMAGE', 'VIDEO', 'AUDIO', 'REQUEST'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setFilter(tab)}
-            className={`px-4 py-2 rounded-lg font-orbitron text-xs tracking-widest transition-all duration-300 ${
+            className={`px-4 py-2 rounded-lg font-orbitron text-xs tracking-widest transition-all duration-300 flex items-center gap-1.5 ${
               filter === tab
                 ? 'bg-[#9B00FF] text-white shadow-[0_0_15px_rgba(155,0,255,0.8)]'
                 : 'bg-[#0A0A10] text-[#8E8EA8] hover:text-white border border-white/10'
             }`}
           >
+            {tab === 'IMAGE' && <ImageIcon className="w-3.5 h-3.5" />}
+            {tab === 'VIDEO' && <Video className="w-3.5 h-3.5" />}
+            {tab === 'AUDIO' && <Music className="w-3.5 h-3.5" />}
+            {tab === 'ALL' && <Gamepad2 className="w-3.5 h-3.5" />}
             {tab}
           </button>
         ))}

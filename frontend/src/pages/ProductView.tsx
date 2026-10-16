@@ -1,7 +1,7 @@
 import React from 'react';
 import { GlowCard } from '../components/GlowCard';
 import { NeonButton } from '../components/NeonButton';
-import { Sparkles, ArrowLeft, Music, CheckCircle2 } from 'lucide-react';
+import { Sparkles, ArrowLeft, Music, Video, CheckCircle2 } from 'lucide-react';
 
 interface ProductViewProps {
   product: any;
@@ -58,6 +58,31 @@ export const ProductView: React.FC<ProductViewProps> = ({
                 Prompt: <span className="text-white font-semibold">{result.prompt}</span>
               </div>
             </div>
+          ) : result?.videoUrl ? (
+            <div className="space-y-4">
+              <div className="relative rounded-xl overflow-hidden border border-[#00CFFF]/50 shadow-[0_0_30px_rgba(0,207,255,0.4)] bg-black">
+                <div className="flex items-center gap-2 p-3 bg-black/60 border-b border-white/10 text-xs font-orbitron text-[#00CFFF]">
+                  <Video className="w-4 h-4" /> AI Synthetic Video Frame
+                </div>
+                <video controls autoPlay loop className="w-full h-auto max-h-[500px]">
+                  <source src={result.videoUrl} type="video/mp4" />
+                  Your browser does not support video tag playback.
+                </video>
+              </div>
+              <div className="p-3 rounded-lg bg-white/5 text-xs font-rajdhani text-[#8E8EA8]">
+                Prompt: <span className="text-white font-semibold">{result.prompt || "Synthetic AI Video Stream"}</span>
+              </div>
+            </div>
+          ) : result?.audioUrl ? (
+            <div className="space-y-4 p-6 rounded-xl bg-[#0A0A10] border border-[#FFD700]/40 shadow-[0_0_20px_rgba(255,215,0,0.2)]">
+              <div className="flex items-center gap-3 text-white font-orbitron text-sm">
+                <Music className="w-6 h-6 text-[#FFD700]" /> Synthesized Audio & Voice Output
+              </div>
+              <audio controls className="w-full">
+                <source src={result.audioUrl} type="audio/mp3" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
           ) : result?.text ? (
             <div className="space-y-4">
               <div className="p-4 rounded-xl bg-black/90 border border-[#00CFFF]/40 text-emerald-400 font-mono text-sm leading-relaxed whitespace-pre-wrap shadow-[0_0_20px_rgba(0,207,255,0.2)]">
@@ -67,16 +92,6 @@ export const ProductView: React.FC<ProductViewProps> = ({
                 <span>Model: {result.model || 'CyberLLM-v4'}</span>
                 <span>Tokens Used: {result.tokensUsed || 120}</span>
               </div>
-            </div>
-          ) : result?.audioUrl ? (
-            <div className="space-y-4 p-6 rounded-xl bg-[#0A0A10] border border-[#FFD700]/40">
-              <div className="flex items-center gap-3 text-white font-orbitron text-sm">
-                <Music className="w-6 h-6 text-[#FFD700]" /> Synthesized Voice Output
-              </div>
-              <audio controls className="w-full">
-                <source src={result.audioUrl} type="audio/mp3" />
-                Your browser does not support the audio element.
-              </audio>
             </div>
           ) : (
             <pre className="p-4 rounded-xl bg-black/90 text-xs font-mono text-white overflow-x-auto">
