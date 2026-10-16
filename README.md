@@ -11,7 +11,10 @@ This README tracks `main`. Features listed under [Unreleased](CHANGELOG.md#unrel
 
 This is an independent community project, not affiliated with or endorsed by Google. Google, Antigravity, Gemini, and related names describe compatibility and install targets. The GitHub repository is canonical; the [hosted catalog](https://aaskills.tech/) and browser-local Workbench are companion discovery and review surfaces.
 
-[![GitHub stars](https://img.shields.io/badge/⭐%2048%2C000%2B%20Stars-gold?style=for-the-badge)](https://github.com/sickn33/agentic-awesome-skills/stargazers)
+[![GitHub stars](https://img.shields.io/badge/⭐%2048%2C000%2B%20Stars-gold?style=for-the-badge)]
+[![Deploy White-Label AI Platform](https://github.com/Anubis-studios/White-label-pro/actions/workflows/deploy.yml/badge.svg?branch=feature%2Fwhite-label-ai-platform-1086725209082726323)](https://github.com/Anubis-studios/White-label-pro/actions/workflows/deploy.yml)
+
+(https://github.com/sickn33/agentic-awesome-skills/stargazers)
 [![Follow @AASkills_ on X](https://img.shields.io/badge/Follow-%40AASkills__-black?style=for-the-badge&logo=x)](https://x.com/AASkills_)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Anthropic-purple)](https://claude.ai)
