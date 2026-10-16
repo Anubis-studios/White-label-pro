@@ -9,6 +9,10 @@ build
 .next
 .output
 .vite
+.gradle
+android/.gradle
+android/build
+android/app/build
 
 # Environment variables
 .env
