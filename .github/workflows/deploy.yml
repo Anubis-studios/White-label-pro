@@ -1,0 +1,89 @@
+name: Deploy White-Label AI Platform
+
+on:
+  push:
+    branches: [ main, master, 'feature/*' ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-deploy-backend:
+    name: Build & Deploy Backend (Render / Railway)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          npm ci || npm install
+
+      - name: Generate Prisma Client
+        run: |
+          cd backend
+          npx prisma generate
+
+      - name: Build Backend TypeScript
+        run: |
+          cd backend
+          npm run build
+
+      - name: Deploy Backend Service
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "Triggering automated backend deployment hook..."
+            curl -s -X POST "$RENDER_DEPLOY_HOOK_URL"
+          else
+            echo "RENDER_DEPLOY_HOOK_URL secret not set. Skipping live trigger."
+          fi
+
+  build-and-deploy-frontend:
+    name: Build & Deploy Frontend (Vercel / Netlify)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm ci || npm install
+
+      - name: Build Frontend Vite App
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Deploy Frontend to Vercel
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ -n "$VERCEL_TOKEN" ]; then
+            echo "Deploying frontend to Vercel production..."
+            npx vercel --prod --token $VERCEL_TOKEN --yes
+          else
+            echo "VERCEL_TOKEN secret not set. Skipping Vercel production upload."
+          fi
