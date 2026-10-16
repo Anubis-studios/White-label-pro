@@ -1,64 +1,35 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build & Dist Artifacts
+dist
+build
+.next
+.output
+.vite
+
+# Environment variables
+.env
 .env.local
-node_modules/
-__pycache__/
-.ruff_cache/
-.worktrees/
-.tmp/
-.DS_Store
+.env.development.local
+.env.test.local
+.env.production.local
 
-# npm pack artifacts
-antigravity-awesome-skills-*.tgz
+# Server & Runtime Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+server.log
+dev_server.log
 
-.agent/rules/
-/.claude-plugin/*
-!/.claude-plugin/plugin.json
-!/.claude-plugin/marketplace.json
-.codex/
-.gemini/
-.release-clone-*/
-data/node_modules
+# Databases & Local Data
+*.db
+*.sqlite
+dev.db
 
-# Generated skill registry outputs (maintainer-owned, never committed in PRs)
-data/drift-baseline.json
-data/registry-report.json
-data/scores.json
-
-# Temporary analysis and report files
-*_REPORT.md
-*_ANALYSIS*.md
-*_COUNT.md
-*_SUMMARY.md
-*_analysis.json
-*_validation.json
-*_results.json
-voltagent_*.json
-similar_skills_*.json
-remaining_*.json
-html_*.json
-
-# Local remediation planning artefacts (keep durable notes under .codex/)
-/LOCAL_SECURITY_SCAN_GOAL.md
-/LOCAL_SECURITY_SCAN_WORKLOG.md
-/SNYK_REMEDIATION_GOAL.md
-/SNYK_REMEDIATION_WORKLOG.md
-/TRADEMARK_REMEDIATION_GOAL.md
-
-# Temporary analysis scripts (tools/scripts/)
-tools/scripts/*voltagent*.py
-tools/scripts/*html*.py
-tools/scripts/*similar*.py
-tools/scripts/*count*.py
-
-# Optional baseline for legacy JS validator (scripts/validate-skills.js)
-validation-baseline.json
-
-# Web app generated assets (from npm run app:setup)
-apps/web-app/public/skills/
-apps/web-app/public/skills.json
-apps/web-app/public/api/info.json
-
-skills/spline-3d-integration/*.zip
-
-# Temporary plugin staging directories
-plugins/.antigravity-awesome-skills.staging-*/
-.vercel
+# Temporary directories & cloned repos
+/home/jules/verification
+anubis_repo
