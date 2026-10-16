@@ -1,0 +1,6 @@
+
+> white-label-ai-backend@1.0.0 start
+> node dist/index.js
+
+[CyberAI Backend] Server running on port 5000
+Terminated

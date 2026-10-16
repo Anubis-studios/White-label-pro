@@ -1,0 +1,115 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum ProviderType {
+  LLM
+  IMAGE
+  EMBEDDING
+  TTS
+  STT
+}
+
+enum MarkupType {
+  FIXED
+  PERCENTAGE
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum PayoutStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model ModelProvider {
+  id          String           @id @default(cuid())
+  name        String
+  type        ProviderType
+  apiBaseUrl  String
+  apiKey      String?
+  metadata    Json?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  metrics     ProviderMetric[]
+}
+
+model Supplier {
+  id              String      @id @default(cuid())
+  name            String
+  baseCostPerUnit Int         // pence
+  currency        String      // "GBP"
+  apiBaseUrl      String
+  apiKey          String?
+  payoutAccountId String
+  isFreeProvider  Boolean     @default(false)
+  products        Product[]
+  payouts         Payout[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Product {
+  id               String        @id @default(cuid())
+  supplierId       String
+  supplier         Supplier      @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  name             String
+  description      String?
+  markupType       MarkupType
+  markupValue      Int           // pence or %
+  unitLabel        String        // "image", "request", "audio", etc.
+  unitsPerPurchase Int           @default(1)
+  isActive         Boolean       @default(true)
+  transactions     Transaction[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model Transaction {
+  id                  String            @id @default(cuid())
+  productId           String
+  product             Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId              String
+  units               Int
+  totalPricePence     Int
+  supplierSharePence  Int
+  platformProfitPence Int
+  currency            String
+  status              TransactionStatus
+  paymentProviderId   String?
+  payouts             Payout[]
+  createdAt           DateTime          @default(now())
+}
+
+model Payout {
+  id               String       @id @default(cuid())
+  transactionId    String
+  transaction      Transaction  @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  supplierId       String
+  supplier         Supplier     @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  amountPence      Int
+  currency         String
+  payoutProviderId String?
+  status           PayoutStatus
+  createdAt        DateTime     @default(now())
+}
+
+model ProviderMetric {
+  id           String        @id @default(cuid())
+  providerId   String
+  provider     ModelProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  avgLatencyMs Int
+  successRate  Float
+  qualityScore Float
+  updatedAt    DateTime      @updatedAt
+}
