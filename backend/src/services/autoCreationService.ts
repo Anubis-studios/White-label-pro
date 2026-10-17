@@ -41,17 +41,21 @@ export async function syncSuppliersAndProducts() {
     }
 
     if (category === 'video_generation' || provider.name === 'RunwayML' || provider.name === 'Luma AI') {
-      await ensureProduct(supplier.id, `${provider.name} - Short Trailer`, `Generate cinematic short AI trailer`, 'video', 1, platformProfit);
-      await ensureProduct(supplier.id, `${provider.name} - Promo Clip`, `Generate promotional short AI video clip`, 'video', 1, platformProfit);
-      await ensureProduct(supplier.id, `${provider.name} - Cutscene`, `Generate high quality game cutscene`, 'video', 1, platformProfit);
+      await ensureProduct(supplier.id, `Cinematic Short Trailer`, `Generate cinematic short AI trailer`, 'video', 1, platformProfit);
+      await ensureProduct(supplier.id, `Promotional Video Clip`, `Generate promotional short AI video clip`, 'video', 1, platformProfit);
+      await ensureProduct(supplier.id, `Game Cutscene Generator`, `Generate high quality game cutscene`, 'video', 1, platformProfit);
     } else if (category === 'music' || category === 'voice' || provider.name === 'AIVA' || provider.name === 'ElevenLabs') {
-      await ensureProduct(supplier.id, `${provider.name} - Voice Line`, `Synthesize custom NPC dialogue voice line`, 'audio', 1, platformProfit);
-      await ensureProduct(supplier.id, `${provider.name} - Audio Pack (5)`, `Generate 5 audio dialogue or SFX tracks`, 'audio', 5, platformProfit);
-      await ensureProduct(supplier.id, `${provider.name} - Theme Track`, `Compose soundtrack or ambient theme music`, 'audio', 1, platformProfit);
+      await ensureProduct(supplier.id, `NPC Voice Line Synthesis`, `Synthesize custom NPC dialogue voice line`, 'audio', 1, platformProfit);
+      await ensureProduct(supplier.id, `Audio SFX Pack (5)`, `Generate 5 audio dialogue or SFX tracks`, 'audio', 5, platformProfit);
+      await ensureProduct(supplier.id, `Ambient Soundtrack Theme`, `Compose soundtrack or ambient theme music`, 'audio', 1, platformProfit);
+    } else if (category === 'pixel_sprites' || category === 'sprite_sheets' || provider.name.includes('Pixel')) {
+      await ensureProduct(supplier.id, `Pixel Art Single Sprite`, `Generate 1 pixel art sprite asset`, 'image', 1, platformProfit);
+      await ensureProduct(supplier.id, `Pixel Art Sprite Pack (5)`, `Generate 5 pixel art sprite assets bundle`, 'image', 5, platformProfit);
+      await ensureProduct(supplier.id, `HD Pixel Sheet Render`, `Generate high definition pixel sprite sheet`, 'image', 1, platformProfit);
     } else {
-      await ensureProduct(supplier.id, `${provider.name} - Single Asset`, `Generate 1 2D/3D asset using AI engine`, 'image', 1, platformProfit);
-      await ensureProduct(supplier.id, `${provider.name} - Asset Pack (5)`, `Generate 5 2D/3D asset pack using AI engine`, 'image', 5, platformProfit);
-      await ensureProduct(supplier.id, `${provider.name} - HD / Cinematic`, `Generate HD render asset using AI engine`, 'image', 1, platformProfit);
+      await ensureProduct(supplier.id, `2D/3D Game Asset - Single`, `Generate 1 2D/3D game asset using AI engine`, 'image', 1, platformProfit);
+      await ensureProduct(supplier.id, `2D/3D Game Asset Pack (5)`, `Generate 5 2D/3D game assets bundle`, 'image', 5, platformProfit);
+      await ensureProduct(supplier.id, `Cinematic HD Game Asset`, `Generate HD render game asset using AI engine`, 'image', 1, platformProfit);
     }
   }
 }

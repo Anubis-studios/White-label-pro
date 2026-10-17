@@ -8,6 +8,7 @@
         android:allowBackup="true"
         android:label="WhiteLabel AI"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.WhiteLabelAI">
         <activity
             android:name=".MainActivity"

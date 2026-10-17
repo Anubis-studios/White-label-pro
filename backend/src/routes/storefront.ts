@@ -22,9 +22,15 @@ router.get('/', async (req, res) => {
       const pricePerUnitPence = baseCost + profit;
       const pricePenceTotal = pricePerUnitPence * p.unitsPerPurchase;
 
+      // Clean product name if it contains supplier name prefix
+      let publicName = p.name;
+      if (p.supplier && p.supplier.name && publicName.includes(p.supplier.name)) {
+        publicName = publicName.replace(new RegExp(`${p.supplier.name}\\s*-\\s*`, 'gi'), '').trim();
+      }
+
       return {
         id: p.id,
-        name: p.name,
+        name: publicName,
         description: p.description,
         unitLabel: p.unitLabel,
         unitsPerPurchase: p.unitsPerPurchase,
