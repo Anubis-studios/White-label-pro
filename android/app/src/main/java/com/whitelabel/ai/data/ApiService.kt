@@ -14,11 +14,19 @@ interface ApiService {
     suspend fun checkout(@Body request: CheckoutRequest): CheckoutResponse
 
     companion object {
-        private const val BASE_URL = "http://10.0.2.2:5000/" // Default local emulator backend URL
-
         fun create(): ApiService {
+            val url = if (com.whitelabel.ai.BuildConfig.BASE_URL.isNotBlank()) {
+                if (com.whitelabel.ai.BuildConfig.BASE_URL.endsWith("/")) {
+                    com.whitelabel.ai.BuildConfig.BASE_URL
+                } else {
+                    "${com.whitelabel.ai.BuildConfig.BASE_URL}/"
+                }
+            } else {
+                "https://white-label-ai-backend.onrender.com/"
+            }
+
             return Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(ApiService::class.java)
