@@ -71,6 +71,18 @@ if (!selected) {
 }
 
 const [command, ...baseArgs] = selected;
+
+// Ensure required python dependencies (like PyYAML) are present
+try {
+  const checkYaml = spawnSync(command, [...baseArgs, '-c', 'import yaml'], { env: PYTHON_ENV, stdio: 'ignore' });
+  if (checkYaml.status !== 0) {
+    console.log('PyYAML missing in Python environment. Installing pyyaml...');
+    spawnSync(command, [...baseArgs, '-m', 'pip', 'install', '--quiet', 'pyyaml'], { env: PYTHON_ENV, stdio: 'inherit' });
+  }
+} catch (e) {
+  // Ignore pip check error
+}
+
 const child = spawn(command, [...baseArgs, ...args], {
   env: PYTHON_ENV,
   stdio: 'inherit',
