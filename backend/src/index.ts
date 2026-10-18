@@ -18,15 +18,29 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Register API Routes
+// Register API Routes (both direct and with /api prefix for compatibility with mobile clients)
 app.use('/registry', registryRouter);
+app.use('/api/registry', registryRouter);
+
 app.use('/suppliers', suppliersRouter);
+app.use('/api/suppliers', suppliersRouter);
+
 app.use('/products', productsRouter);
+app.use('/api/products', productsRouter);
+
 app.use('/storefront', storefrontRouter);
+app.use('/api/storefront', storefrontRouter);
+
 app.use('/checkout', checkoutRouter);
+app.use('/api/checkout', checkoutRouter);
+
 app.use('/bundles', bundlesRouter);
+app.use('/api/bundles', bundlesRouter);
 
 app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 

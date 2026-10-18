@@ -92,7 +92,7 @@ router.post('/', async (req, res) => {
     });
 
     let providerType: ProviderType = ProviderType.LLM;
-    if (product.unitLabel === 'image') providerType = ProviderType.IMAGE;
+    if (product.unitLabel === 'image' || product.unitLabel === 'video') providerType = ProviderType.IMAGE;
     if (product.unitLabel === 'audio') providerType = ProviderType.TTS;
     if (product.unitLabel === 'embedding') providerType = ProviderType.EMBEDDING;
 
