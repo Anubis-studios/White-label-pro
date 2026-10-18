@@ -40,7 +40,9 @@ router.post('/', async (req, res) => {
       let clientSecret = 'mock_client_secret_xyz123';
       let intentId = 'pi_mock_' + Date.now();
 
-      if (stripeKey.startsWith('sk_live_') || stripeKey.startsWith('sk_test_real_')) {
+      const isRealStripeKey = stripeKey.startsWith('sk_live_') || (stripeKey.startsWith('sk_test_') && stripeKey !== 'sk_test_mock_key');
+
+      if (isRealStripeKey) {
         try {
           const intent = await stripe.paymentIntents.create({
             amount: totalPricePence,
