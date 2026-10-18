@@ -36,16 +36,21 @@ export const Storefront: React.FC<StorefrontProps> = ({
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/storefront');
-      setProducts(response.data);
+      const baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || '';
+      const response = await axios.get(`${baseUrl}/api/storefront`);
+      if (Array.isArray(response.data)) {
+        setProducts(response.data);
+      } else {
+        throw new Error('API response is not an array');
+      }
     } catch (err) {
       console.error('Failed to fetch storefront products:', err);
       setProducts([
-        { id: 'p1', name: 'Makko AI - Single Asset', description: 'Generate 1 2D/3D game asset using AI engine.', unitLabel: 'image', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
-        { id: 'p2', name: 'RunwayML - Short Trailer', description: 'Generate cinematic short AI trailer video.', unitLabel: 'video', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
-        { id: 'p3', name: 'ElevenLabs - Voice Line', description: 'Synthesize custom NPC dialogue voice line.', unitLabel: 'audio', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
-        { id: 'p4', name: 'PixelLab.ai - Asset Pack (5)', description: 'Generate 5 pixel art sprite assets bundle.', unitLabel: 'image', unitsPerPurchase: 5, pricePenceTotal: 150, formattedPrice: '£1.50', currency: 'GBP' },
-        { id: 'p5', name: 'AIVA - Theme Track', description: 'Compose soundtrack or ambient game music.', unitLabel: 'audio', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' }
+        { id: 'p1', name: 'Single Image', description: 'Generate 1 ultra-HD artificial intelligence image.', unitLabel: 'image', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
+        { id: 'p2', name: 'Short Response', description: 'Generate high speed quick text response.', unitLabel: 'request', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
+        { id: 'p3', name: 'Voice Line', description: 'Synthesize custom NPC dialogue voice line.', unitLabel: 'audio', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' },
+        { id: 'p4', name: 'Asset Pack (5)', description: 'Generate 5 pixel art sprite assets bundle.', unitLabel: 'image', unitsPerPurchase: 5, pricePenceTotal: 150, formattedPrice: '£1.50', currency: 'GBP' },
+        { id: 'p5', name: 'Short Video Trailer', description: 'Generate cinematic short AI trailer video.', unitLabel: 'video', unitsPerPurchase: 1, pricePenceTotal: 30, formattedPrice: '£0.30', currency: 'GBP' }
       ]);
     } finally {
       setLoading(false);
